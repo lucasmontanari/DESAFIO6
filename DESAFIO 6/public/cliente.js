@@ -11,11 +11,12 @@ const mensaje = document.querySelector('#mensaje')
 async function renderProducts(productos) {
     if(productos.length > 0){
         document.querySelector('#tabla').classList.remove('eliminarVista')
-        const response = await fetch('./productos.ejs')
+        const response = await fetch('./productos.hbs')
         const plantilla = await response.text()
         document.querySelector('#datos-productos').innerHTML = ''
-        productos.forEach(product => {
-            const html = ejs.render(plantilla, product)
+        productos.forEach(producto => {
+            const template = Handlebars.compile(plantilla)
+            const html = template(producto)
             document.querySelector('#datos-productos').innerHTML += html
         })
         document.querySelector('#lista-vacia').classList+=' eliminarVista'
@@ -41,11 +42,12 @@ formProductos.addEventListener('submit', event => {
 
 //MENSAJES
 async function renderMensajes(mensajes) {
-        const response = await fetch('./mensajes.ejs')
+        const response = await fetch('./mensajes.hbs')
         const plantilla = await response.text()
         document.querySelector('#chat').innerHTML = ''
         mensajes.forEach(mensaje => {
-            const html = ejs.render(plantilla, mensaje)
+            const template = Handlebars.compile(plantilla)
+            const html = template(mensaje)
             document.querySelector('#chat').innerHTML += html
         })
 } 
